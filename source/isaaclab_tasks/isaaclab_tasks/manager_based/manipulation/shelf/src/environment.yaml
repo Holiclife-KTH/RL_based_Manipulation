@@ -1,0 +1,31 @@
+objects:
+    bottle_1 : /home/irol/Downloads/usd_files/Bottle_6/Bottle_6.usd
+    bowl_1: /home/irol/Downloads/usd_files/Bowl_2/simple-cereal-bowl-1.snapshot.1/Bowl_2.usd
+    cup_1: /home/irol/Downloads/usd_files/Collected_Cup_1/Cup_1.usd
+    mug_1: /home/irol/Downloads/usd_files/Collected_Mug_2/Mug_2.usd
+    mug_2: /home/irol/Downloads/usd_files/Collected_Mug_3/Mug_3.usd
+    can_1: /home/irol/Downloads/usd_files/Can_6/Can_6.usd
+
+pose:
+    bottle_1: [-0.75, -0.2, 1.05, 1.0, 0.0, 0.0, 0.0]
+    bowl_1: [-0.75, 0.0, 1.05, 1.0, 0.0, 0.0, 0.0]
+    cup_1: [-0.75, 0.2, 1.05, 1.0, 0.0, 0.0, 0.0]
+    mug_1: [-0.6, -0.2, 1.05, 1.0, 0.0, 0.0, 0.0]
+    mug_2: [-0.6, 0.0, 1.05, 1.0, 0.0, 0.0, 0.0]
+    can_1: [-0.6, 0.2, 1.05, 1.0, 0.0, 0.0, 0.0]
+
+id:
+    bottle_1: 0
+    bowl_1: 1
+    cup_1: 2
+    mug_1: 3
+    mug_2: 4
+    can_1: 5
+
+width:
+    bottle_1: 0.06
+    bowl_1: 0.09
+    cup_1: 0.06
+    mug_1: 0.08
+    mug_2: 0.08
+    can_1: 0.06
