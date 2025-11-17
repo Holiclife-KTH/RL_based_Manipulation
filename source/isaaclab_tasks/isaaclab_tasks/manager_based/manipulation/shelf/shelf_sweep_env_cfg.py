@@ -152,7 +152,7 @@ class RewardsCfg:
 
     reaching = RewTerm(
         func=mdp.reward_sweep.reward_for_hand_reaching,
-        weight=2.0,
+        weight=3.0,
         params={}
     )
 
