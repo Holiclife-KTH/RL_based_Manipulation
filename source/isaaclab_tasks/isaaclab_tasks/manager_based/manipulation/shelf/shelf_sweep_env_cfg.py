@@ -46,17 +46,17 @@ class ShelfSweepSceneCfg(InteractiveSceneCfg):
         spawn=sim_utils.DomeLightCfg(color=(0.75, 0.75, 0.75), intensity=2500.0),
     )
 
-    mount = AssetBaseCfg(
-        prim_path="{ENV_REGEX_NS}/Mount",
-        spawn=sim_utils.UsdFileCfg(
-            usd_path=f"omniverse://localhost/Library/Shelf/Arena/thor_table.usd",
-        ),
-        init_state=AssetBaseCfg.InitialStateCfg(pos=(0.0, 0.0, 0.79505), rot=(1.0, 0.0, 0.0, 0.0),),
-    )
+    # mount = AssetBaseCfg(
+    #     prim_path="{ENV_REGEX_NS}/Mount",
+    #     spawn=sim_utils.UsdFileCfg(
+    #         usd_path=f"omniverse://localhost/Library/Shelf/Arena/thor_table.usd",
+    #     ),
+    #     init_state=AssetBaseCfg.InitialStateCfg(pos=(0.0, 0.0, 0.79505), rot=(1.0, 0.0, 0.0, 0.0),),
+    # )
     
     shelf = RigidObjectCfg(
         prim_path="{ENV_REGEX_NS}/Shelf",
-        spawn=sim_utils.UsdFileCfg(usd_path=f"omniverse://localhost/Library/Shelf/Arena/speedrack.usd", mass_props=MassPropertiesCfg(mass=100),),
+        spawn=sim_utils.UsdFileCfg(usd_path=f"omniverse://localhost/Library/Shelf/Arena/speedrack_shape.usd", mass_props=MassPropertiesCfg(mass=100),),
         init_state=RigidObjectCfg.InitialStateCfg(pos=(-0.7, 0.0, 0.0), rot=(1.0, 0.0, 0.0, 0.0)),
         debug_vis=False,
     )
@@ -169,7 +169,7 @@ class RewardsCfg:
     
     # sweeping_bonus = RewTerm(func=mdp.reward_sweep.pushing_bonus, params={"command_name": "target_goal_pos"}, weight=3.0)
 
-    # homing_after_sweep = RewTerm(func=mdp.reward_sweep.homing_reward, params={"command_name": "target_goal_pos"}, weight=14.0)
+    homing_after_sweep = RewTerm(func=mdp.reward_sweep.homing_reward, params={"command_name": "target_goal_pos"}, weight=14.0)
 
     
 

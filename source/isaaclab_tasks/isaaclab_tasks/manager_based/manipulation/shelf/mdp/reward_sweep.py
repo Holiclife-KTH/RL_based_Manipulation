@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 from dataclasses import MISSING
 
 
-from isaaclab.assets import RigidObject, Articulation, RigidObjectCollection
+from isaaclab.assets import RigidObject, Articulation, RigidObjectCollection, AssetBase
 from isaaclab.managers import SceneEntityCfg, ManagerTermBase
 from isaaclab.managers import RewardTermCfg as RewTerm
 from isaaclab.sensors import FrameTransformer
@@ -149,7 +149,6 @@ def homing_reward(env: ManagerBasedRLEnv,
     robot: Articulation = env.scene[asset_cfg.name]
     ee: FrameTransformer = env.scene[ee_frame_cfg.name]
     object_collection: RigidObjectCollection = env.scene[object_collection_cfg.name]
-    shelf: RigidObject = env.scene[shelf_cfg.name]
 
 
     command = env.command_manager.get_command(command_name)

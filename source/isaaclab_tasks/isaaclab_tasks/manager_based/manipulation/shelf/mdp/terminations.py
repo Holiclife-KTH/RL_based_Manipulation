@@ -141,8 +141,8 @@ def hand_velocity_termination(env: ManagerBasedRLEnv, asset_cfg: SceneEntityCfg 
     
     termination = torch.any(torch.abs(robot.data.joint_vel[:, :6])> threshold, dim=1)
     # termination = False
-    
-    print(torch.abs(robot.data.joint_vel[:, :6]))
+    # print(robot.data.applied_torque)
+    # print(torch.abs(robot.data.joint_vel[:, :6]))
 
     # print((torch.norm(ee_ang_vel_w, dim=-1, p=2) > 2.0))
     # print(torch.norm(ee_lin_vel_w, dim=-1, p=2))
