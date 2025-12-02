@@ -138,21 +138,21 @@ class RewardsCfg:
     """Reward terms for the MDP."""
 
     # action penalty
-    action_rate = RewTerm(func=mdp.action_rate_l2, weight=-0.02)
+    action_rate = RewTerm(func=mdp.action_rate_l2, weight=-0.01)
     joint_vel = RewTerm(
         func=mdp.reward_sweep.joint_vel_l2,
-        weight=-0.02,
+        weight=-0.01,
         params={"asset_cfg": SceneEntityCfg("robot")},
     )
     
-    shelf_collision = RewTerm(func=mdp.reward_sweep.shelf_Collision, params={}, weight=-0.4)
+    shelf_collision = RewTerm(func=mdp.reward_sweep.shelf_Collision, params={}, weight=-0.1)
 
-    object_collision = RewTerm(func=mdp.reward_sweep.object_collision, params={}, weight=-1.0)
+    object_collision = RewTerm(func=mdp.reward_sweep.object_collision, params={}, weight=-0.1)
 
 
     reaching = RewTerm(
         func=mdp.reward_sweep.reward_for_hand_reaching,
-        weight=3.0,
+        weight=2.0,
         params={}
     )
 
@@ -165,11 +165,11 @@ class RewardsCfg:
 
     sweeping_object = RewTerm(func=mdp.reward_sweep.pushing_target, 
                               params={"command_name": "target_goal_pos"}, 
-                              weight=7.0)
+                              weight=6.0) # 14 
     
     # sweeping_bonus = RewTerm(func=mdp.reward_sweep.pushing_bonus, params={"command_name": "target_goal_pos"}, weight=3.0)
 
-    homing_after_sweep = RewTerm(func=mdp.reward_sweep.homing_reward, params={"command_name": "target_goal_pos"}, weight=14.0)
+    homing_after_sweep = RewTerm(func=mdp.reward_sweep.homing_reward, params={"command_name": "target_goal_pos"}, weight=12.0) #12 
 
     
 
@@ -180,19 +180,19 @@ class TerminationsCfg:
     time_out = DoneTerm(func=mdp.time_out, time_out=True)
     object_drop = DoneTerm(func=mdp.drop_object_termination, time_out=False, params={"height_condition":MISSING})
     shelf_collision = DoneTerm(func=mdp.shelf_collision_termination,time_out=False, params={"threshold": 0.1})
-    hand_velocity = DoneTerm(func=mdp.hand_velocity_termination, time_out=False, params={"threshold": 0.7})
+    hand_velocity = DoneTerm(func=mdp.hand_velocity_termination, time_out=False, params={"threshold": 1.0})
 
 @configclass
 class CurriculumCfg:
     """Curriculum terms for the MDP."""
-    # sweeping = CurrTerm(
-    #     func=mdp.modify_reward_weight, params={"term_name": "sweeping_object", "weight": 7.0, "num_steps": 150000}
-    # )
+    obj_collision = CurrTerm(
+        func=mdp.modify_reward_weight, params={"term_name": "object_collision", "weight": -0.5, "num_steps": 250000}
+    )
     
     # homing = CurrTerm(
     #     func=mdp.modify_reward_weight, params={"term_name": "homing_after_sweep", "weight": 12.0, "num_steps": 300000}
     # )
-    pass
+
 
 
 ##
@@ -220,7 +220,7 @@ class ShelfSweepEnvCfg(ManagerBasedRLEnvCfg):
         """Post initialization."""
         # general settings
         self.decimation = 2
-        self.episode_length_s = 8.0
+        self.episode_length_s = 10.0
         self.sim.render_interval = 2
         # simulation settings
         self.sim.dt = 0.01  # 100Hz

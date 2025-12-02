@@ -37,7 +37,7 @@ def reward_for_hand_reaching(env: ManagerBasedRLEnv,
 
 
     offset_pos = target_pos_w.clone()
-    offset_pos[:, 0] = offset_pos[:, 0] 
+    offset_pos[:, 0] = offset_pos[:, 0] - 0.02
     offset_pos[:, 1] = offset_pos[:, 1] - target_width[:, 0]
     offset_pos[:, 2] = offset_pos[:, 2] + 0.09
     
@@ -55,7 +55,7 @@ def reward_for_hand_reaching(env: ManagerBasedRLEnv,
     
 
     alpha = -10.0 
-    reward = torch.exp(alpha * distance)
+    reward = torch.exp(alpha * distance_ee)
 
     return reward
 
@@ -112,19 +112,24 @@ def pushing_target(env: ManagerBasedRLEnv,
     wrist_pos_w = wrist.data.target_pos_w[..., 0, :].clone()
 
     offset_pos = target_pos_w.clone()
-    offset_pos[:, 0] = offset_pos[:, 0] 
+    offset_pos[:, 0] = offset_pos[:, 0] - 0.02
     offset_pos[:, 1] = offset_pos[:, 1] - target_width[:, 0]
     offset_pos[:, 2] = offset_pos[:, 2] + 0.09
 
     distance = torch.norm((des_pos_w - target_pos_w), dim=-1, p=2)
+    # y_norm = torch.norm((des_pos_w[:,1] - target_pos_w[:,1]), dim=-1, p=2)
     zeta_m = torch.where((torch.norm(offset_pos - ee_pos_w, dim=-1, p=2)) < 0.04 , torch.where(torch.abs(offset_pos[:, 1] - wrist_pos_w[:, 1])<0.04, 1, 0), 0)
     # zeta_m = torch.where(torch.norm(offset_pos - ee_pos_w, dim=-1, p=2) < 0.04, 1, 0)
-    obj_vel_rew = torch.where((target_lin_vel_w[:, 1]) > 0.05, torch.where((target_lin_vel_w[:, 1]) < 0.2, 0.5, 0), 0)
-    reward = torch.where(distance < 0.03, 2.0, zeta_m *((1 - distance/0.18) + obj_vel_rew))
-
+    obj_vel_rew = torch.where((target_lin_vel_w[:, 1]) > 0.05, torch.where((target_lin_vel_w[:, 1]) < 0.1, 0.5, -0.5), 0)
+    # print(obj_vel_rew)
+    # print(target_lin_vel_w[:, 1])
+    reward = torch.where(distance < 0.04, 2.0 , zeta_m *((1 - distance/0.18) + obj_vel_rew))
+    # print(f"reward: {reward}")
+    # print(f"distance: {distance}")
+    # print(f"y_norm: {y_norm < 0.03}")
     # print(offset_pos[:, 1] - wrist_pos_w[:, 1])
     # print(direction)
-
+    # print(target_lin_vel_w[:, 1])
     # print(target_lin_vel_w[:, 1])
     # print(f"offset pos: {offset_pos}")
     # print(f"ee pos: {ee_pos_w}")
@@ -161,7 +166,7 @@ def homing_reward(env: ManagerBasedRLEnv,
 
     # obtain the desired and current positions
     des_pos_w = command[:, :3]
-    distance = torch.norm((des_pos_w - target_pos_w), dim=-1, p=2)
+    distance = torch.norm((des_pos_w[:, 1:] - target_pos_w[:, 1:]), dim=-1, p=2)
     # distance_sub = torch.norm((subgoal_pos[:, :3] - ee_pos_w[..., 0,:3]), dim=-1, p=2)
     joint_pos_error = torch.sum(torch.abs(robot.data.joint_pos[:, : 5] - robot.data.default_joint_pos[:, :5]), dim=1)
     # reward_for_home_pose = torch.exp(-1.2 * distance_sub)
