@@ -166,8 +166,7 @@ class RewardsCfg:
     sweeping_object = RewTerm(func=mdp.reward_sweep.pushing_target, 
                               params={"command_name": "target_goal_pos"}, 
                               weight=6.0) # 14 
-    
-    # sweeping_bonus = RewTerm(func=mdp.reward_sweep.pushing_bonus, params={"command_name": "target_goal_pos"}, weight=3.0)
+
 
     homing_after_sweep = RewTerm(func=mdp.reward_sweep.homing_reward, params={"command_name": "target_goal_pos"}, weight=12.0) #12 
 
@@ -179,6 +178,7 @@ class TerminationsCfg:
 
     time_out = DoneTerm(func=mdp.time_out, time_out=True)
     object_drop = DoneTerm(func=mdp.drop_object_termination, time_out=False, params={"height_condition":MISSING})
+    push_fast = DoneTerm(func=mdp.push_fast_termination, time_out=False, params={"speed_condition":MISSING})
     shelf_collision = DoneTerm(func=mdp.shelf_collision_termination,time_out=False, params={"threshold": 0.1})
     hand_velocity = DoneTerm(func=mdp.hand_velocity_termination, time_out=False, params={"threshold": 1.0})
 

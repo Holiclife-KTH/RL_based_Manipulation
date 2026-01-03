@@ -98,6 +98,24 @@ def drop_object_termination(env: ManagerBasedRLEnv,
     # print(episode_done)
     return episode_done  # (N,) -> 환경별 episode 종료 여부
 
+def push_fast_termination(env: ManagerBasedRLEnv,
+                            object_collection_cfg: SceneEntityCfg = SceneEntityCfg("object_collection"),
+                            params: float = -1.0,
+                            speed_condition: float = MISSING,
+                            ):
+
+    object_collection: RigidObjectCollection = env.scene[object_collection_cfg.name]
+    target_ids = env.target_id.squeeze(-1).long()  # Shape: (num_envs,)
+
+    object_vel = object_collection.data.object_lin_vel_w[torch.arange(env.scene.num_envs), target_ids].clone()  # (N, num_objects, 13)
+    speed = torch.norm(object_vel, dim=-1, p=2)
+    
+    # ✅ 물체가 너무 빠르게 움직이는지 확인
+    too_fast = speed > speed_condition  # (N, num_objects) -> Bool 텐서
+
+    # print(episode_done)
+    return too_fast  # (N,) -> 환경별 episode 종료 여부
+
 
 def shelf_collision_termination(env: ManagerBasedRLEnv,
                                 shelf_cfg: SceneEntityCfg = SceneEntityCfg("shelf"),

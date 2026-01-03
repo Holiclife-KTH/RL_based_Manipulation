@@ -2,7 +2,7 @@ import yaml
 import numpy as np
 import torch 
 # YAML 파일 로드 함수
-def load_yaml_config(yaml_path):
+def load_yaml_config(yaml_path)->dict:
     with open(yaml_path, "r") as file:
         config = yaml.safe_load(file)
     return config

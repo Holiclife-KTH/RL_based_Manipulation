@@ -94,20 +94,20 @@ UR5e_CFG = ArticulationCfg(
                 "wrist_3_joint":28,
             },
             stiffness={
-                "shoulder_pan_joint": 600.0,
-                "shoulder_lift_joint": 600.0,
-                "elbow_joint": 600.0,
-                "wrist_1_joint":112.0,
-                "wrist_2_joint":112.0,
-                "wrist_3_joint":112.0,
+                "shoulder_pan_joint": 3658.45,
+                "shoulder_lift_joint": 4998.42, #600
+                "elbow_joint": 3652.62,
+                "wrist_1_joint":3765.9,
+                "wrist_2_joint":3608.19, #112.0
+                "wrist_3_joint":3966.85,
             },
             damping={ 
-                "shoulder_pan_joint": 34.64101615,
-                "shoulder_lift_joint": 34.64101615,
-                "elbow_joint": 34.64101615,
-                "wrist_1_joint":15.24,
-                "wrist_2_joint":15.24,
-                "wrist_3_joint":15.24,
+                "shoulder_pan_joint": 426.82,
+                "shoulder_lift_joint": 561.58,
+                "elbow_joint": 410.53, #34.64101615,
+                "wrist_1_joint":424.94, 
+                "wrist_2_joint":407.05, #15.24
+                "wrist_3_joint":444.16,
             },
         ),
         "gripper": ImplicitActuatorCfg(

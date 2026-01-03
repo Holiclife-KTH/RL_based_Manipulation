@@ -123,7 +123,7 @@ def pushing_target(env: ManagerBasedRLEnv,
     obj_vel_rew = torch.where((target_lin_vel_w[:, 1]) > 0.05, torch.where((target_lin_vel_w[:, 1]) < 0.1, 0.5, -0.5), 0)
     # print(obj_vel_rew)
     # print(target_lin_vel_w[:, 1])
-    reward = torch.where(distance < 0.04, 2.0 , zeta_m *((1 - distance/0.18) + obj_vel_rew))
+    reward = torch.where(distance < 0.03, 2.0 * (1 - distance/0.18), zeta_m *((1 - distance/0.18) + obj_vel_rew))
     # print(f"reward: {reward}")
     # print(f"distance: {distance}")
     # print(f"y_norm: {y_norm < 0.03}")

@@ -36,7 +36,7 @@ class UR5eShelfEnvCfg(ShelfSweepEnvCfg):
         self.scene.robot = UR5e_CFG.replace(prim_path="{ENV_REGEX_NS}/Robot")
 
         # Set actions for the specific robot type (franka)
-        self.actions.arm_action = mdp.JointPositionActionCfg(
+        self.actions.arm_action = mdp.RelativeJointPositionActionCfg(
             asset_name="robot", 
             joint_names=["shoulder_pan_joint",
                         "shoulder_lift_joint",
@@ -45,7 +45,7 @@ class UR5eShelfEnvCfg(ShelfSweepEnvCfg):
                         "wrist_2_joint",
                         "wrist_3_joint"], 
             scale=0.5,
-            use_default_offset=True
+            use_zero_offset=True
         )
         
         self.actions.gripper_action = mdp.BinaryJointPositionActionCfg(
@@ -78,7 +78,7 @@ class UR5eShelfEnvCfg(ShelfSweepEnvCfg):
 
 
         # YAML 파일 로드
-        object_cfgs = load_yaml_config(yaml_path="/home/irol/IsaacLab/source/isaaclab_tasks/isaaclab_tasks/manager_based/manipulation/shelf/src/environment.yaml")
+        object_cfgs:dict = load_yaml_config(yaml_path="/home/irol/IsaacLab/source/isaaclab_tasks/isaaclab_tasks/manager_based/manipulation/shelf/src/environment.yaml")
 
 
         rigid_obj_dict = {}
