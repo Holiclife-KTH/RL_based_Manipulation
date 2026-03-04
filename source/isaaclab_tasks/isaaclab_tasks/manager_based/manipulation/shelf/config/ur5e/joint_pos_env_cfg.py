@@ -181,6 +181,7 @@ class UR5eShelfEnvCfg(ShelfSweepEnvCfg):
         self.events.object_spawn.params["pose_array"] = load_and_reshape_pose(object_pose_dict)
         self.events.object_spawn.params["object_width_dict"] = object_width_dict
         self.events.object_spawn.params["ceiling_height"] = 1.8
+        self.events.object_spawn.params["sweep_dir_options"] = False
         self.events.object_spawn.params["task_mode"] = "sweeping_right"
 
         self.commands.target_goal_pos.asset_dict = rigid_obj_dict

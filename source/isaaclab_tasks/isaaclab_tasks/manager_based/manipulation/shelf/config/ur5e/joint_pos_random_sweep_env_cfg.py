@@ -14,7 +14,7 @@ from isaaclab.utils.assets import ISAAC_NUCLEUS_DIR
 from isaaclab.sim.schemas.schemas_cfg import MassPropertiesCfg
 
 from isaaclab_tasks.manager_based.manipulation.shelf import mdp
-from isaaclab_tasks.manager_based.manipulation.shelf.shelf_sweep_env_cfg import ShelfSweepEnvCfg
+from isaaclab_tasks.manager_based.manipulation.shelf.shelf_sweep_ramdom_env_cfg import ShelfSweepRandomEnvCfg
 import torch
 import os
 
@@ -27,7 +27,7 @@ from isaaclab_tasks.manager_based.manipulation.shelf.src.ur5e import UR5e_CFG
 from isaaclab_tasks.manager_based.manipulation.shelf.src.shelf_utils import load_yaml_config, load_and_reshape_pose
 
 @configclass
-class UR5eShelfEnvCfg(ShelfSweepEnvCfg):
+class UR5eSweepEnvCfg(ShelfSweepRandomEnvCfg):
     def __post_init__(self):
         # post init of parent
         super().__post_init__()
@@ -36,7 +36,7 @@ class UR5eShelfEnvCfg(ShelfSweepEnvCfg):
         self.scene.robot = UR5e_CFG.replace(prim_path="{ENV_REGEX_NS}/Robot")
 
         # Set actions for the specific robot type (franka)
-        self.actions.arm_action = mdp.RelativeJointPositionActionCfg(
+        self.actions.arm_action = mdp.JointPositionActionCfg(
             asset_name="robot", 
             joint_names=["shoulder_pan_joint",
                         "shoulder_lift_joint",
@@ -45,7 +45,7 @@ class UR5eShelfEnvCfg(ShelfSweepEnvCfg):
                         "wrist_2_joint",
                         "wrist_3_joint"], 
             scale=0.5,
-            use_zero_offset=True
+            use_default_offset=True
         )
         
         self.actions.gripper_action = mdp.BinaryJointPositionActionCfg(
@@ -78,7 +78,7 @@ class UR5eShelfEnvCfg(ShelfSweepEnvCfg):
 
 
         # YAML 파일 로드
-        object_cfgs:dict = load_yaml_config(yaml_path="/home/irol/IsaacLab/source/isaaclab_tasks/isaaclab_tasks/manager_based/manipulation/shelf/src/environment.yaml")
+        object_cfgs = load_yaml_config(yaml_path="/home/irol/IsaacLab/source/isaaclab_tasks/isaaclab_tasks/manager_based/manipulation/shelf/src/environment.yaml")
 
 
         rigid_obj_dict = {}
@@ -106,7 +106,7 @@ class UR5eShelfEnvCfg(ShelfSweepEnvCfg):
                                                                             max_depenetration_velocity=5.0,
                                                                             disable_gravity=False,
                                                                         ),
-                                                                        mass_props=MassPropertiesCfg(mass=0.5),
+                                                                        mass_props=MassPropertiesCfg(mass=1.0),
                                                                     ),
                                                                 )
             
@@ -181,6 +181,7 @@ class UR5eShelfEnvCfg(ShelfSweepEnvCfg):
         self.events.object_spawn.params["pose_array"] = load_and_reshape_pose(object_pose_dict)
         self.events.object_spawn.params["object_width_dict"] = object_width_dict
         self.events.object_spawn.params["ceiling_height"] = 1.8
+        self.events.object_spawn.params["sweep_dir_options"] = True
         self.events.object_spawn.params["task_mode"] = "sweeping_right"
 
         self.commands.target_goal_pos.asset_dict = rigid_obj_dict
@@ -195,7 +196,7 @@ class UR5eShelfEnvCfg(ShelfSweepEnvCfg):
 
 
 @configclass
-class UR5eShelfEnvCfg_PLAY(UR5eShelfEnvCfg):
+class UR5eSweepEnvCfg_PLAY(UR5eSweepEnvCfg):
     def __post_init__(self):
         # post init of parent
         super().__post_init__()

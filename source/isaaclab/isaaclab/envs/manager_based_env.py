@@ -149,6 +149,7 @@ class ManagerBasedEnv:
         # initialize target_object id
         self.target_id = torch.zeros((self.scene.num_envs, 1), device=self.device)
         self.target_width = torch.zeros((self.scene.num_envs, 1), device=self.device)
+        self.sweep_dir = torch.zeros((self.scene.num_envs, 3), device=self.device)
 
         # create event manager
         # note: this is needed here (rather than after simulation play) to allow USD-related randomization events

@@ -70,7 +70,7 @@ class DynamicObjectGoalPosCommand(CommandTerm):
         self.target_init_state_w[env_ids] = self.object_collection.data.object_link_state_w[env_ids, target_ids[env_ids]]
 
         # Update only the reset environments in pos_command_w
-        self.pos_command_w[env_ids] = self.target_init_state_w[env_ids, ..., :3] + self.init_pos_offset
+        self.pos_command_w[env_ids] = self.target_init_state_w[env_ids, ..., :3] + self.env.sweep_dir[env_ids, :3]
 
     def _update_metrics(self):
         pass

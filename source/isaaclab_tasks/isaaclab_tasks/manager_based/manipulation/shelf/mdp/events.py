@@ -25,6 +25,7 @@ def randomize_scene(
     object_width_dict: dict = MISSING,
     object_collection_cfg: SceneEntityCfg = SceneEntityCfg("object_collection"),
     ceiling_height: int = MISSING,
+    sweep_dir_options: bool = False,
     task_mode: str = MISSING
 ) -> None:
     
@@ -56,6 +57,8 @@ def randomize_scene(
 
 
     shuffle(asset_keys_list)
+    # asset_keys_list.append(asset_keys_list.pop(asset_keys_list.index(target_object_name))) 
+    # asset_keys_list.insert(0, asset_keys_list.pop(asset_keys_list.index(target_object_name)))
 
     for index, asset_name in enumerate(asset_keys_list):
         if asset_name == target_object_name:
@@ -73,9 +76,19 @@ def randomize_scene(
             env_ids=env_ids,
             object_ids=object_ids[0]
         )
+    
+    env.sweep_dir[env_ids, 1] = 0.18  # 초기화
+    direction = 1.0
+    if sweep_dir_options:
+        direction = choice([-1.0, 1.0])  # -1.0 for left, 1.0 for right
+        env.sweep_dir[env_ids, 1] = env.sweep_dir[env_ids, 1] * direction
+    
 
     if task_mode == "sweeping_right":
-        adjacent_indices = sweeping_right_mode(target_index, rows, cols, env.device)
+        if direction > 0:
+            adjacent_indices = sweeping_right_mode(target_index, rows, cols, env.device)
+        else:
+            adjacent_indices = sweeping_left_mode(target_index, rows, cols, env.device)
 
         for adjacent in adjacent_indices:
             object_index = adjacent[0] * cols + adjacent[1]
@@ -142,6 +155,39 @@ def sweeping_right_mode(target_index: int, rows: int, cols: int, device):
 
     # (4) 모든 결과를 GPU Tensor로 결합
     adjacent_array = torch.cat((front_indices, right_index, diagonal_indices), dim=0)
+
+    return adjacent_array
+
+def sweeping_left_mode(target_index: int, rows: int, cols: int, device):
+    """
+    Identify objects in front, left, and diagonal positions of the target.
+    If the target is in the last row, include all objects in the front rows.
+    Returns results as a GPU Tensor.
+    """
+    target_row = target_index // cols
+    target_col = target_index % cols
+
+    # (1) 앞쪽 찾기 (모든 앞쪽 행 포함)
+    if target_row > 0:
+        front_rows = torch.arange(target_row - 1, -1, -1, device=device)
+        front_indices = torch.stack((front_rows, torch.full_like(front_rows, target_col)), dim=1)
+    else:
+        front_indices = torch.empty((0, 2), dtype=torch.int64, device=device)
+
+    # (2) 왼쪽 찾기
+    if target_col > 0:
+        left_index = torch.tensor([[target_row, target_col - 1]], device=device)
+    else:
+        left_index = torch.empty((0, 2), dtype=torch.int64, device=device)
+
+    # (3) 좌측 대각선 찾기
+    if target_row > 0 and target_col > 0:
+        diagonal_indices = torch.stack((front_rows, torch.full_like(front_rows, target_col - 1)), dim=1)
+    else:
+        diagonal_indices = torch.empty((0, 2), dtype=torch.int64, device=device)
+
+    # (4) 모든 결과를 GPU Tensor로 결합
+    adjacent_array = torch.cat((front_indices, left_index, diagonal_indices), dim=0)
 
     return adjacent_array
 

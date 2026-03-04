@@ -11,5 +11,7 @@ from .observations import *  # noqa: F401, F403
 from .terminations import *  # noqa: F401, F403
 from .terminations import *
 from .reward_sweep import *
+from .reward_random_sweep import *
+
 from .commands import *
 from .events import *
