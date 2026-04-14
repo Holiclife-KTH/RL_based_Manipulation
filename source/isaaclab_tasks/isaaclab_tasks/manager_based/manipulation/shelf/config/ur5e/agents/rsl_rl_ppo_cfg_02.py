@@ -10,7 +10,7 @@ from isaaclab_rl.rsl_rl import (
 @configclass
 class UR5eSweepPPORunnerCfg(RslRlOnPolicyRunnerCfg):
     num_steps_per_env = 36
-    max_iterations = 100000
+    max_iterations = 62000
     save_interval = 50
     experiment_name = "UR5e_shelf_sweep_random"
     run_name = ""

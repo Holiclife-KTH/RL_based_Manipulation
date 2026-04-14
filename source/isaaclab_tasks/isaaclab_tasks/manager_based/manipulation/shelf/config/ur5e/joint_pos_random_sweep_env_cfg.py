@@ -78,7 +78,7 @@ class UR5eSweepEnvCfg(ShelfSweepRandomEnvCfg):
 
 
         # YAML 파일 로드
-        object_cfgs = load_yaml_config(yaml_path="/home/irol/IsaacLab/source/isaaclab_tasks/isaaclab_tasks/manager_based/manipulation/shelf/src/environment.yaml")
+        object_cfgs = load_yaml_config(yaml_path="/home/irol/RL_based_Manipulation/source/isaaclab_tasks/isaaclab_tasks/manager_based/manipulation/shelf/src/environment.yaml")
 
 
         rigid_obj_dict = {}
