@@ -139,18 +139,19 @@ def pushing_target(
         0,
     )
 
+
     # Tagucci 1
     reward = torch.where(
         distance < 0.03,
         2.0 * torch.exp(-5.0 * distance),
-        ((1 - distance / 0.18) + obj_vel_rew),
+        zeta_m * ((1 - distance / 0.18) + obj_vel_rew),
     )
 
-    # Tagucci 2
+    # # Tagucci 2
     # reward = torch.where(
     #     distance < 0.03,
     #     2.0 * torch.exp(-5.0 * distance),
-    #     zeta_m * ((1 - distance / 0.18) + obj_vel_rew),
+    #     ((1 - distance / 0.18) + obj_vel_rew),
     # )
     return reward
 
@@ -185,12 +186,12 @@ def homing_reward(
     )
     reward_for_home_pose = torch.exp(-0.5 * joint_pos_error)
 
+
     # Tagucci 1
-    return reward_for_home_pose
+    return torch.where(distance < 0.03, reward_for_home_pose, 0)
 
-    # Tagucci 2
-    # return torch.where(distance < 0.03, reward_for_home_pose, 0)
-
+    # # Tagucci 2
+    # return reward_for_home_pose
 
 def object_collision(
     env: ManagerBasedRLEnv,
