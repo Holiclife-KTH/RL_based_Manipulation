@@ -56,7 +56,7 @@ class ShelfSweepRandomSceneCfg(InteractiveSceneCfg):
     
     shelf = RigidObjectCfg(
         prim_path="{ENV_REGEX_NS}/Shelf",
-        spawn=sim_utils.UsdFileCfg(usd_path=f"omniverse://localhost/Library/Shelf/Arena/speedrack.usd", mass_props=MassPropertiesCfg(mass=100),),
+        spawn=sim_utils.UsdFileCfg(usd_path=f"/home/ssu/Downloads/usd_files/speedrack/speedrack.usd", mass_props=MassPropertiesCfg(mass=100),),
         init_state=RigidObjectCfg.InitialStateCfg(pos=(-0.7, 0.0, 0.0), rot=(1.0, 0.0, 0.0, 0.0)),
         debug_vis=False,
     )
@@ -139,35 +139,35 @@ class RewardsCfg:
 
     # action penalty
     # Tagucci: -0.005 / -0.01 / -0.03
-    action_rate = RewTerm(func=mdp.action_rate_l2, weight=-0.005)
+    action_rate = RewTerm(func=mdp.action_rate_l2, weight=-0.03)
     joint_vel = RewTerm(
         func=mdp.reward_random_sweep.joint_vel_l2,
-        weight=-0.005,
+        weight=-0.03,
         params={"asset_cfg": SceneEntityCfg("robot")},
     )
     # Tagucci: -0.01 / -0.1 / -0.5
-    shelf_collision = RewTerm(func=mdp.reward_random_sweep.shelf_Collision, params={}, weight=-0.01)
+    shelf_collision = RewTerm(func=mdp.reward_random_sweep.shelf_Collision, params={}, weight=-0.5)
 
-    object_collision = RewTerm(func=mdp.reward_random_sweep.object_collision, params={}, weight=-0.01)
+    object_collision = RewTerm(func=mdp.reward_random_sweep.object_collision, params={}, weight=-0.5)
 
 
     # Tagucci: 1.0 / 2.0 / 3.0
     reaching = RewTerm(
         func=mdp.reward_random_sweep.reward_for_hand_reaching,
-        weight=1.0,
+        weight=3.0,
         params={}
     )
 
     # Tagucci: 1.0 / 2.0 / 3.0
     orientation = RewTerm(
         func=mdp.reward_random_sweep.align_ee_target,
-        weight=1.0,
+        weight=2.0,
         params={},
     )
     # Tagucci: 3.0 / 6.0 / 9.0
     sweeping_object = RewTerm(func=mdp.reward_random_sweep.pushing_target, 
                               params={"command_name": "target_goal_pos"}, 
-                              weight=3.0) # 14 
+                              weight=6.0) # 14 
 
     # Tagucci: 9.0 / 12.0 / 15.0
     homing_after_sweep = RewTerm(func=mdp.reward_random_sweep.homing_reward, params={"command_name": "target_goal_pos"}, weight=9.0) #12 
